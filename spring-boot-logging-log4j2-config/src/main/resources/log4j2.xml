@@ -54,7 +54,7 @@
     </Appenders>
 
     <Loggers>
-        <Logger name="com.rhwayfun.springboot.logging.log4j2.config.BigdataUtilImpl" level="debug" additivity="false">
+        <Logger name="com.rhwayfun.springboot.logging.log4j2.com.BigdataUtilImpl" level="debug" additivity="false">
             <AppenderRef ref="actionLogFile" />
         </Logger>
 

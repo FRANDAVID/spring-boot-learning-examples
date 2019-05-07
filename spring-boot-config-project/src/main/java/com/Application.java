@@ -1,4 +1,4 @@
-package config;
+package com;
 
 import java.io.IOException;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;

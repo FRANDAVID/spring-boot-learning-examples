@@ -463,7 +463,7 @@
                     <version>0.7.5.201505241946</version>
                     <configuration>
                         <excludes>
-                            <exclude>com/rhwayfun/springboot/*/test.Application.class</exclude>
+                            <exclude>com/rhwayfun/springboot/*/test.com.Application.class</exclude>
                         </excludes>
                     </configuration>
                     <executions>

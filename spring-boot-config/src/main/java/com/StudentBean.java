@@ -1,4 +1,4 @@
-package config;
+package com;
 
 /**
  * Company lenovo.com Copyright (C) 1984-2019 All Rights Reserved.
