@@ -11,7 +11,6 @@
   </parent>
 
   <modelVersion>4.0.0</modelVersion>
-  <groupId>spring-boot-learning-examples</groupId>
   <artifactId>spring-boot-config-project</artifactId>
   <version>1.0-SNAPSHOT</version>
   <packaging>jar</packaging>
@@ -32,7 +31,7 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>spring-boot-learning-examples</groupId>
+      <groupId>com.rhwayfun</groupId>
       <artifactId>spring-boot-config</artifactId>
       <version>1.0-SNAPSHOT</version>
     </dependency>

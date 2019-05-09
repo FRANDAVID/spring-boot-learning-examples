@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<validation-config>
+	<password-policy>
+		<min-length>4</min-length>
+		<max-length>20</max-length>
+		<!-- not needed -->
+		<min-numerics>2</min-numerics>
+		<!-- 密码可用格式：至少10个字符，必须有数字，有大写字母，有小写字母，有下列特殊字符中的一个：@#￥%^&+=  -->
+		<!-- <pattern><![CDATA[^.*(?=.{10,})(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=]).*$]]></pattern> -->
+		<!-- This will ensure that a password has only alphanumeric characters and no whitespace -->
+		<!-- XML中不需要对特殊字符进行转义，如\d不需要像在代码中写的那样写\\d(the compiler will replace "\\" to "\" ) -->
+		<!--<password-pattern>^(?!.*[^A-Za-z0-9-_]).{4,20}$</password-pattern> 2012.11.1 要求密码格式改为：长度7~20个任意字符-->
+		<password-pattern>^().{4,20}$</password-pattern>
+	</password-policy>
+	
+	<!-- 用户名（email）格式 -->
+	<username-policy>
+		<min-length>5</min-length>
+		<max-length>256</max-length>
+		<email-pattern>^[a-zA-Z0-9-_\\.]+@([a-zA-Z0-9-]+[\\.]{1})+[a-zA-Z0-9-]+$</email-pattern>
+	</username-policy>
+	
+	<!-- 验证码格式 -->
+	<verify-code-policy>
+		<!-- 下面的正则表达式也可以
+		<verify-code-pattern>^[a-zA-Z0-9]{4}$</verify-code-pattern>
+		-->
+		<verify-code-pattern>^(?!.*[^A-Za-z0-9]).{4,8}$</verify-code-pattern>
+	</verify-code-policy>
+	
+	<!-- 验证码Tag格式 -->
+	<tag-for-verify-code-policy>
+		<!-- 下面的正则表达式也可以
+		<tag-pattern>^[a-zA-Z0-9]{8,20}$</tag-pattern>
+		-->
+		<tag-pattern>^(?!.*[^A-Za-z0-9]).{8,20}$</tag-pattern>
+	</tag-for-verify-code-policy>
+	
+	<!-- 手机号码规则 -->
+	<phoneno-policy>
+		<cellphone-no-max-length>11</cellphone-no-max-length>
+		<cellphone>^(13|14|15|16|17|18)\d{9}$</cellphone>
+	</phoneno-policy>
+	
+	<!-- IMEI号码规则 -->
+	<imei-no-policy>
+		<imei-no-max-length>15</imei-no-max-length>
+		<imei-no-pattern>^\d{15}$</imei-no-pattern>
+	</imei-no-policy>
+	
+	<!-- 日期格式 -->
+	<date-policy>
+		<birthday-date-format>yyyy-MM-dd</birthday-date-format>
+		<general-date-format>yyyy-MM-dd'T'HH:mm:ss</general-date-format>
+	</date-policy>	
+	
+	<!-- Gender rules -->
+	<gender>
+		<min-length>1</min-length>
+		<max-length>1</max-length>
+		<gender-pattern>^(m|f|u)$</gender-pattern>
+	</gender>
+	
+	<!-- 邮编规则 -->
+	<zip-code>
+		<zip-code-pattern>^[1-9][0-9]{5}$</zip-code-pattern>
+	</zip-code>
+	
+	<!-- TODO 昵称规则 -->
+	<nickname>
+		<!-- 可以是中文, 大小写字母，数字。应该可以有“·”，“-”这样的符号（但还未在此正则表达式中指出） -->
+		<!-- 如果有昵称，则至少有一位（在匹配时一定要让正则匹配在比较字符长度之前）。 -->
+		<nickname-pattern>^(?=.*[A-Za-z])(?=.*[0-9])(?=.*[\u4e00-\u9fa5])(?!.*[^A-Za-z0-9\u4e00-\u9fa5])(?!.*\s).{1,30}+$</nickname-pattern>
+	</nickname>
+	
+	<!-- TODO 真实姓名规则 -->
+	<realname>
+		<!-- 可以是中文, 大小写字母，数字。应该可以有“·”，“-”这样的符号（但还未在此正则表达式中指出） -->
+		<!-- 如果有真实姓名，则至少有一位（在匹配时一定要让正则匹配在比较字符长度之前）。 -->
+		<realname-pattern>^(?=.*[A-Za-z])(?=.*[0-9])(?=.*[\u4e00-\u9fa5])(?!.*[^A-Za-z0-9\u4e00-\u9fa5])(?!.*\s).{1,20}+$</realname-pattern>
+	</realname>
+	
+	<!-- TODO 省或市规则 -->
+	<state-city>
+		<!-- 可以是中文, 大小写字母，数字。应该可以有“·”，“-”这样的符号（但还未在此正则表达式中指出） -->
+		<!-- 如果提交了State或City信息，则至少有一位（在匹配时一定要让正则匹配在比较字符长度之前）。 -->
+		<state-city-pattern>^(?=.*[A-Za-z])(?=.*[0-9])(?=.*[\u4e00-\u9fa5])(?!.*[^A-Za-z0-9\u4e00-\u9fa5])(?!.*\s).{1,20}+$</state-city-pattern>
+	</state-city>
+	
+	<!-- TODO 地址规则 -->
+	<address>
+		<address-pattern>^(?=.*[A-Za-z])(?=.*[0-9])(?=.*[\u4e00-\u9fa5])(?!.*[^A-Za-z0-9\u4e00-\u9fa5])(?!.*\s).{1,200}+$</address-pattern>
+	</address>
+</validation-config>
+

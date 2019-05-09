@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+				        http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+				        http://www.springframework.org/sckhema/tx
+				        http://www.springframework.org/schema/tx/spring-tx-2.5.xsd
+				        http://www.springframework.org/schema/aop
+				        http://www.springframework.org/schema/aop/spring-aop-2.5.xsd">
+	
+
+	<bean id="memcachedClientFactory"
+		class="com.lenovo.lps.userservice.common.MemcachedClientFactory">
+		<property name="memcachedClientParameter" value="${memcached.client.parameter}" />
+	</bean>
+
+	<bean id="languageService"
+		class="com.lenovo.lps.userservice.language.services.impl.LanguageServiceImpl">
+		<property name="languageDao">
+			<ref bean="languageDao" />
+		</property>
+	</bean>
+	<bean id="languageDao"
+		class="com.lenovo.lps.userservice.language.dao.impl.LanguageDaoImpl">
+		<property name="jdbcTemplate">
+			<ref bean="jdbcTemplateConfig" />
+		</property>
+	</bean>
+	<bean id="appConfigManager" class="com.lenovo.lps.userservice.config.AppConfigManager"
+		init-method="init">
+		<property name="languageService" ref="languageService" />
+		<property name="configDao" ref="configDao" />
+		<property name="useUssMemCachedClient" value="true" />
+		<property name="useSaMemCachedClient" value="true" />
+
+		<property name="nodeId" value="${com.lenovo.lps.node.sn}" />
+		<property name="memcachedClientFactory" ref="memcachedClientFactory" />
+
+		<property name="wwIDCFlag" value="${com.lenovo.lps.userservice.ww.idc.flag}" />
+		<property name="redisUsed" value="${com.lenovo.lps.userservice.redis.used}" />
+		<property name="updataallowed" value="${com.lenovo.lps.userservice.updataallowed}" />
+	</bean>
+
+	<!-- 配置DAO -->
+	<bean id="namespaceDao" class="com.lenovo.lps.userservice.ww.dao.impl.NamespaceDaoImpl">
+		<property name="jdbcTemplateNamespace">
+			<ref bean="jdbcTemplateNamespace" />
+		</property>
+	</bean>
+	<!-- minghui xiong -->
+
+	<bean id="ussuserSMC" class="com.lenovo.lps.userservice.cache.WwMemcachedClientImpl">
+	</bean>
+
+
+	<bean id="wwManager"
+		class="com.lenovo.lps.userservice.ww.manager.impl.WWManagerImpl">
+		<property name="namespaceDao">
+			<ref bean="namespaceDao" />
+		</property>
+		<property name="centernnamespacedao">
+			<ref bean="centernnamespacedao" />
+		</property>
+		<property name="ussMemCachedClient">
+			<ref bean="ussuserSMC" />
+		</property>
+	</bean>
+
+
+
+
+</beans>

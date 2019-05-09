@@ -12,7 +12,8 @@
         <!-- 基础篇 -->
         <module>spring-boot-quickstart</module>
         <module>spring-boot-configuration</module>
-
+        <module>spring-boot-config</module>
+        <module>spring-boot-config-webMvc</module>
         <!-- web开发 -->
         <module>spring-boot-web-jsp</module>
         <module>spring-boot-web-thymeleaf</module>

@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/context 
+				        http://www.springframework.org/schema/context/spring-context-3.0.xsd
+     					http://www.springframework.org/schema/beans 
+     					http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+     					http://www.springframework.org/schema/jdbc 
+     					http://www.springframework.org/schema/jdbc/spring-jdbc-3.0.xsd
+     					http://www.springframework.org/schema/tx 
+     					http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+     					http://www.springframework.org/schema/aop 
+     					http://www.springframework.org/schema/aop/spring-aop-3.0.xsd">
+	<bean id="configBean"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="ignoreUnresolvablePlaceholders" value="true"/>
+		<property name="locations">
+			<list>
+				<value>
+					file:/data/lenovoid/app/uki.properties
+				</value>
+			</list>
+		</property>
+	</bean>
+
+
+	<!-- 配置哪些类哪些方法使用事务 -->
+	<!-- enable the configuration of transactional behavior based on annotations -->
+	<tx:annotation-driven transaction-manager="txManager" />
+
+	<!-- transaction manager, use JtaTransactionManager for global tx -->
+	<bean id="txManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSourceLocalTarget" />
+	</bean>
+	
+
+	
+	<!-- 本地库数据源 -->
+	<bean id="localConnectionPoolMgr"
+		class="com.lenovo.lps.userservice.thirdpartext.OracleUniversalConnectionPoolManagerExt"
+		destroy-method="destroyConnectionPool">
+		<property name="jmxEnabled" value="false" />
+		<property name="poolName"
+			value="USS_Authen_ConnectionPool_Local" />
+	</bean>
+	<bean id="dataSourceLocalTarget"
+		class="oracle.ucp.jdbc.PoolDataSourceFactory"
+		factory-method="getPoolDataSource"
+		depends-on="localConnectionPoolMgr">
+
+		<property name="connectionFactoryClassName"
+			value="oracle.jdbc.pool.OracleDataSource" />
+		<property name="connectionPoolName"
+			value="USS_Authen_ConnectionPool_Local" />
+
+		<property name="URL"
+			value="${com.lenovo.lps.userservice.dbLocal.url}" />
+		<property name="user"
+			value="${com.lenovo.lps.userservice.dbLocal.username}" />
+		<property name="password"
+			value="${com.lenovo.lps.userservice.dbLocal.password}" />
+
+		<property name="minPoolSize"
+			value="${com.lenovo.lps.userservice.db.poolMinSize}" />
+		<property name="maxPoolSize"
+			value="${com.lenovo.lps.userservice.db.poolMaxSize}" />
+		<property name="connectionWaitTimeout" value="10" />
+		<property name="inactiveConnectionTimeout" value="120" />
+		<property name="validateConnectionOnBorrow" value="true" />
+		<property name="fastConnectionFailoverEnabled"
+			value="${com.lenovo.lps.userservice.db.ons.enabled}" />
+		<property name="ONSConfiguration"
+			value="${com.lenovo.lps.userservice.db.ons.config}" />
+	</bean>
+
+	<!-- 配置库数据源 -->
+	<bean id="configConnectionPoolMgr"
+		class="com.lenovo.lps.userservice.thirdpartext.OracleUniversalConnectionPoolManagerExt"
+		destroy-method="destroyConnectionPool">
+		<property name="jmxEnabled" value="false" />
+		<property name="poolName"
+			value="USS_Authen_ConnectionPool_Config" />
+	</bean>
+	<bean id="dataSourceConfigTarget"
+		class="oracle.ucp.jdbc.PoolDataSourceFactory"
+		factory-method="getPoolDataSource"
+		depends-on="configConnectionPoolMgr">
+
+		<property name="connectionFactoryClassName"
+			value="oracle.jdbc.pool.OracleDataSource" />
+		<property name="connectionPoolName"
+			value="USS_Authen_ConnectionPool_Config" />
+
+		<property name="URL"
+			value="${com.lenovo.lps.userservice.dbConfig.url}" />
+		<property name="user"
+			value="${com.lenovo.lps.userservice.dbConfig.username}" />
+		<property name="password"
+			value="${com.lenovo.lps.userservice.dbConfig.password}" />
+
+		<property name="minPoolSize"
+			value="${com.lenovo.lps.userservice.db.poolMinSize}" />
+		<property name="maxPoolSize"
+			value="${com.lenovo.lps.userservice.db.poolMaxSize}" />
+		<!-- 
+			<property name="initialPoolSize"
+			value="${com.lenovo.lps.userservice.db.poolMinSize}" />
+			<property name="maxConnectionReuseTime" value="300"/>
+			<property name="maxConnectionReuseCount" value="128"/>
+			<property name="timeToLiveConnectionTimeout" value="180"/>
+		-->
+		<property name="connectionWaitTimeout" value="10" />
+		<property name="inactiveConnectionTimeout" value="120" />
+		<property name="validateConnectionOnBorrow" value="true" />
+
+		<property name="fastConnectionFailoverEnabled"
+			value="${com.lenovo.lps.userservice.db.ons.enabled}" />
+		<property name="ONSConfiguration"
+			value="${com.lenovo.lps.userservice.db.ons.config}" />
+	</bean>
+
+	<bean id="dataSourceExceptionAdvice"
+		class="com.lenovo.lps.userservice.spring.interceptor.DatasourceExceptionAdvice" />
+
+	<!-- 本地库代理 -->
+	<bean id="dataSourceLocal"
+		class="org.springframework.aop.framework.ProxyFactoryBean">
+		<property name="proxyInterfaces">
+			<value>javax.sql.DataSource</value>
+		</property>
+		<property name="interceptorNames">
+			<list>
+				<value>dataSourceExceptionAdvice</value>
+			</list>
+		</property>
+		<property name="target">
+			<ref bean="dataSourceLocalTarget" />
+		</property>
+	</bean>
+
+	<!-- 配置库代理 -->
+	<bean id="dataSourceConfig"
+		class="org.springframework.aop.framework.ProxyFactoryBean">
+		<property name="proxyInterfaces">
+			<value>javax.sql.DataSource</value>
+		</property>
+		<property name="interceptorNames">
+			<list>
+				<value>dataSourceExceptionAdvice</value>
+			</list>
+		</property>
+		<property name="target">
+			<ref bean="dataSourceConfigTarget" />
+		</property>
+	</bean>
+
+	<!-- 本地库JDBC模板 -->
+	<bean id="jdbcTemplateLocal"
+		class="org.springframework.jdbc.core.JdbcTemplate">
+		<property name="dataSource">
+			<ref bean="dataSourceLocal" />
+		</property>
+	</bean>
+
+	<!-- 命名空间库JDBC模板 -->
+	<bean id="jdbcTemplateNamespace"
+		class="org.springframework.jdbc.core.JdbcTemplate">
+		<property name="dataSource">
+			<ref bean="dataSourceLocal" />
+		</property>
+	</bean>
+
+	<!-- 配置库JDBC模板 -->
+	<bean id="jdbcTemplateConfig"
+		class="org.springframework.jdbc.core.JdbcTemplate">
+		<property name="dataSource">
+			<ref bean="dataSourceConfig" />
+		</property>
+	</bean>
+	
+	<!-- xmh 2012.11.27 新增中心节点  -->
+	<bean id="jdbcTemplateCenternNamespace"
+		class="org.springframework.jdbc.core.JdbcTemplate">
+		<property name="dataSource">
+			<ref bean="dataSourceLocalTarget" />
+		</property>
+	</bean>
+	<bean id="transactionManagerCenternNamespace"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource">
+			<ref bean="dataSourceLocalTarget" />
+		</property>
+	</bean>
+
+</beans>
