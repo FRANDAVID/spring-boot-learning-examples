@@ -62,6 +62,8 @@
         <module>spring-boot-logging-log4j2-config</module>
         <module>spring-boot-log4j2-integration</module>
         <module>spring-boot-custom-schema</module>
+      <module>spring-boot-config-class</module>
+      <module>spring-boot-redis-configFromDB</module>
     </modules>
 
 
