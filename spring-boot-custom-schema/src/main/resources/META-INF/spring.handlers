@@ -1,1 +1,1 @@
-http\://blog.csdn.net/cutesource/schema/people=com.rhwayfun.spring.boot.custom.schema.spring.PeopleNamespaceHandler
+http\://blog.csdn.net/cutesource/schema/people=com.config.rhwayfun.spring.boot.custom.schema.spring.PeopleNamespaceHandler

@@ -99,6 +99,7 @@
       <artifactId>junit</artifactId>
       <version>4.12</version>
     </dependency>
+<!--    引入大菠萝的配置类client-->
     <dependency>
       <groupId>com.rhwayfun</groupId>
       <artifactId>spring-boot-config</artifactId>
