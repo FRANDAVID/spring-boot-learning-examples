@@ -1,6 +1,5 @@
 package com.config;
 
-import com.ctrip.framework.apollo.spring.annotation.EnableApolloConfig;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 
@@ -12,12 +11,13 @@ import org.springframework.context.annotation.Configuration;
  * @project spring-boot-learning-examples
  */
 @Configuration
-@EnableApolloConfig({"lenovoid.public"})
 public class AppPublicConfig {
 
 
 @Value("${redis.cluster.list}")
   private String clusterList;
+
+
 
   public String getClusterList() {
     return clusterList;
